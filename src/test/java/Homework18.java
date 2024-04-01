@@ -15,6 +15,7 @@ public class Homework18 extends BaseTest{
         clickLoginBtn();
         //Click Play Btn
         clickPlayBtn();
+        //Works as expected
         Thread.sleep(Duration.ofMillis(2000));
         // Validate that a song is playing
         findSoundBar();
