@@ -12,11 +12,18 @@ import org.testng.annotations.*;
 
 import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URL;
 import java.time.Duration;
+import java.util.HashMap;
+import java.util.Objects;
 
 public class BaseTest {
 
     public static WebDriver driver = null;
+    private static final ThreadLocal<WebDriver> threadDriver = new ThreadLocal<>();
+    public static WebDriver getDriver(){
+        return threadDriver.get();
+    }
     public WebDriverWait wait = null;
     public Actions actions = null;
 
@@ -32,16 +39,18 @@ public class BaseTest {
 
     public void launchBrowser(String baseURL) throws MalformedURLException{
 
-        driver = pickBrowser(System.getProperty("browser"));
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-        driver.manage().window().maximize();
-        driver.get(baseURL);
+        //driver = pickBrowser(System.getProperty("browser"));
+        threadDriver.set(pickBrowser(System.getProperty("browser")));
+        getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        getDriver().manage().window().maximize();
+        getDriver().get(baseURL);
     }
 
 
     @AfterMethod
-    public void closeBrowser(){
-        driver.quit();
+    public void tearDown(){
+        threadDriver.get().close();
+        threadDriver.remove();
     }
 
     public static WebDriver pickBrowser (String browser) throws MalformedURLException {
@@ -60,6 +69,8 @@ public class BaseTest {
             case "grid-chrome":
                 caps.setCapability("browserName", "chrome");
                 return driver = new RemoteWebDriver(URI.create(gridUrl).toURL(),caps);
+            case "cloud":
+                return LambdaTest();
 
             default:
                 WebDriverManager.chromedriver().setup();
@@ -68,4 +79,25 @@ public class BaseTest {
                 return driver = new ChromeDriver(chromeOptions);
         }
     }
+
+     public static WebDriver LambdaTest() throws MalformedURLException{
+         String hubURL = "@hub.lambdatest.com/wd/hub";
+         String userName = "uralinduk";
+         String accessKey = "cfq5DhLOGLzuhUByvfjpuAvpV3w50jByUPCVdSTgoBx93dtlTT";
+         //Capabilities
+         DesiredCapabilities capabilities = new DesiredCapabilities();
+         capabilities.setCapability("browserName", "chrome");
+         capabilities.setCapability("browserVersion", "123.0");
+         HashMap<String, Object> ltOptions = new HashMap<String, Object>();
+         ltOptions.put("username", "uralinduk");
+         ltOptions.put("accessKey", "cfq5DhLOGLzuhUByvfjpuAvpV3w50jByUPCVdSTgoBx93dtlTT");
+         ltOptions.put("project", "Untitled");
+         ltOptions.put("w3c", true);
+         ltOptions.put("plugin", "java-java");
+
+         capabilities.setCapability("LT:Options", ltOptions);
+         return driver = new RemoteWebDriver(new URL("https://" +userName + ":" +accessKey + hubURL), capabilities);
+
+
     }
+}
