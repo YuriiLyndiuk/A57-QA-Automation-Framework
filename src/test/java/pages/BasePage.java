@@ -9,6 +9,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.UUID;
 
 public class BasePage {
 
@@ -28,4 +29,5 @@ public class BasePage {
     public void doubleClick(By locator){
         actions.doubleClick(findElement(locator)).perform();
     }
+
 }

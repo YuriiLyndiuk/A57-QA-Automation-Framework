@@ -38,9 +38,9 @@ public class LoginPage extends BasePage {
         findElement(submitBtn).click();
     }
 
-    public void login() {
-        provideEmail("yurii.lyndiuk@testpro.io");
-        providePassword("jjbuQe8D");
+    public void login(String email, String password) {
+        provideEmail(email);
+        providePassword(password);
         clickSubmit();
     }
     //Method using Page Factory element
