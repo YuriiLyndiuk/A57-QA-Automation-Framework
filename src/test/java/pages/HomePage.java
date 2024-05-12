@@ -11,9 +11,12 @@ public class HomePage extends BasePage{
 
     //Locators
     By userAvatarIcon = By.cssSelector("img[class='avatar']");
+    By userProfileAvatar = By.xpath("//a[@class='view-profile']");
 
     //Method
     public WebElement getUserAvatar(){
         return findElement(userAvatarIcon);
     }
+    public void clickOnUserAvatarIcon() {
+        findElement(userProfileAvatar).click();}
 }
