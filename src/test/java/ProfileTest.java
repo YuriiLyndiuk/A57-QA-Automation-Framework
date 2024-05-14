@@ -1,14 +1,10 @@
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import pages.HomePage;
 import pages.LoginPage;
 import pages.ProfilePage;
 
-import java.util.UUID;
-
-public class ProfileTest extends BaseTest{
+public class ProfileTest extends BaseTest {
 
     @Test
     public void changeProfileName() throws InterruptedException {
